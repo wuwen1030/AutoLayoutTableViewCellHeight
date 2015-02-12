@@ -28,7 +28,7 @@
     
     // Set the preferredMaxLayoutWidth of the mutli-line bodyLabel based on the evaluated width of the label's frame,
     // as this will allow the text to wrap correctly, and as a result allow the label to take on the correct height.
-    self.titelLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.titelLabel.frame);
+//    self.titelLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.titelLabel.frame);
     self.contentLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.contentLabel.frame);
 }
 
@@ -44,10 +44,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.items = @[@"短文本",
-                   @"这是一个很短的文本，估计只有一行",
-                   @"这个文本有点长，确实有点长，估计会有两行吧，应该会有两行的，对！",
-                   @"楼上的，你觉得你很长吗？敢亮出来比划比划么？小短短，我才是最长的，大概要有三行吧，楼下的，你说是不是啊？"];
+    self.items = @[@{@"title":@"TEXT1",@"content":@"短文本"},
+                   @{@"title":@"TEXT2",@"content":@"这是一个很短的文本，估计只有一行"},
+                   @{@"title":@"TEXT3",@"content":@"这个文本有点长，确实有点长，估计会有两行吧，应该会有两行的，对！"},
+                   @{@"title":@"TEXT4",@"content":@"楼上的，你觉得你很长吗？敢亮出来比划比划么？小短短，我才是最长的，大概要有三行吧，楼下的，你说是不是啊？"}];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -64,12 +64,10 @@
 {
     MyCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     
-    cell.titelLabel.text = self.items[indexPath.row];
-    cell.contentLabel.text = self.items[indexPath.row];
+    NSDictionary *dic = self.items[indexPath.row];
+    cell.titelLabel.text = dic[@"title"];
+    cell.contentLabel.text = dic[@"content"];
     
-    [cell setNeedsUpdateConstraints];
-    [cell updateConstraintsIfNeeded];
-
     return cell;
 }
 
@@ -81,12 +79,10 @@
         cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     }
     
-    cell.titelLabel.text = self.items[indexPath.row];
-    cell.contentLabel.text = self.items[indexPath.row];
+    NSDictionary *dic = self.items[indexPath.row];
+    cell.titelLabel.text = dic[@"title"];
+    cell.contentLabel.text = dic[@"content"];
     
-    [cell setNeedsUpdateConstraints];
-    [cell updateConstraintsIfNeeded];
-
     cell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(tableView.bounds), CGRectGetHeight(cell.bounds));
     
     [cell setNeedsLayout];
@@ -94,6 +90,11 @@
     
     CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
     return height + 1;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end
